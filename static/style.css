@@ -72,12 +72,12 @@ nav li a:hover {
     float: right;
 }
 
-.imdb {
+.douban {
     font-size: 12px;
     font-weight: bold;
-    color: black;
+    color: #ffffff;
     text-decoration: none;
-    background: #F5C518;
+    background: #61af6c;
     border-radius: 5px;
     padding: 3px 5px;
 }
