@@ -32,13 +32,6 @@ class Movie(db.Model):  # type: ignore # 表名将会是 movie
     year = db.Column(db.String(4))  # 电影年份
 
 
-@app.route('/')
-def index():
-    user = User.query.first()
-    movies = Movie.query.all()
-    return render_template('index.html', user=user, movies=movies)
-
-
 @app.cli.command()  # 注册为命令，可以传入 name 参数来自定义命令
 @click.option('--drop', is_flag=True, help='Create after drop.')  # 设置选项
 def initdb(drop):
@@ -55,7 +48,7 @@ def forge():
     db.create_all()
 
     # 全局的两个变量移动到这个函数内
-    name = 'Grey Li'
+    name = 'Heng'
     movies = [
         {'title': 'My Neighbor Totoro', 'year': '1988'},
         {'title': 'Dead Poets Society', 'year': '1989'},
@@ -77,3 +70,20 @@ def forge():
 
     db.session.commit()
     click.echo('Done.')
+
+
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
+
+
+@app.errorhandler(404)  # 传入要处理的错误代码
+def page_not_found(e):  # 接受异常对象作为参数
+    return render_template('404.html'), 404  # 返回模板和状态码
+
+
+@app.route('/')
+def index():
+    movies = Movie.query.all()
+    return render_template('index.html', movies=movies)
